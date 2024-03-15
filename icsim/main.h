@@ -20,19 +20,18 @@
  * SOFTWARE.
  */
 
-#ifndef DEVICE_H
-#define DEVICE_H
+#ifndef MAIN_H
+#define MAIN_H
 
-#include "iclib.h"
+#include <cstdio>
+#include <cstring>
+#include "icsimlib.h"
 
-class Device {
-    public:
-        virtual double get_property(unsigned property_hash) = 0;
-        virtual double get_slot(unsigned slot_var_hash, int slot_num) = 0;
-        virtual double get_reagent(unsigned reagent, ic_reagent_mode reagent_mode) = 0;
-        virtual void set_property(unsigned property_hash, double value) = 0;
-        virtual unsigned get_device_name_hash() const = 0;
-        virtual unsigned get_device_type_hash() const = 0;
-};
+unsigned step_all_chips(std::vector<SimulatedIC<SimulatedICInterface>>);
+int tick_all_chips(std::vector<SimulatedIC<SimulatedICInterface>>);
+int run_all_chips(std::vector<SimulatedIC<SimulatedICInterface>>);
+int process_commands(const std::vector<SimulatedIC<SimulatedICInterface>*>&, FILE * = nullptr);
+void print_help();
+int main(int argc, char *argv[]);
 
-#endif //DEVICE_H
+#endif //MAIN_H

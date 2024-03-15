@@ -20,22 +20,24 @@
  * SOFTWARE.
  */
 
-#ifndef ICASM_SIMULATEDICINTERFACE_H
-#define ICASM_SIMULATEDICINTERFACE_H
+#ifndef SIMULATEDICINTERFACE_H
+#define SIMULATEDICINTERFACE_H
 
+#include <vector>
+#include <algorithm>
 #include "ICInterface.h"
 #include "SimulatedDevice.h"
 
 class SimulatedICInterface : public ICInterface {
     protected:
-        int device_count;
-        double registers[18] = {};
-        double stack[512] = {};
-        int set_devices[7] = {};
-        SimulatedDevice *devices;
+        size_t device_count;
+        std::vector<double> registers;
+        std::vector<double> stack;
+        std::vector<int> set_devices;
+        std::vector<SimulatedDevice *> devices;
     public:
-        SimulatedICInterface(int count, SimulatedDevice *devices);
-        inline SimulatedDevice find_device(int device);
+        explicit SimulatedICInterface(size_t count = 0, SimulatedDevice *devices[] = nullptr);
+        inline SimulatedDevice find_device(int pin);
         int find_devices(SimulatedDevice found_devices[], unsigned device_hash);
         int find_devices(SimulatedDevice found_devices[], unsigned device_hash, unsigned name_hash);
         double loadd(unsigned property_hash, int device) override;
@@ -51,10 +53,11 @@ class SimulatedICInterface : public ICInterface {
         void storeb(double value, unsigned property_hash, unsigned device_hash) override;
         void storebn(double value, unsigned property_hash, unsigned device_hash, unsigned name_hash) override;
         bool get_device_set(int device) override;
+        bool set_device(int device, int pin);
         double *get_register(int register_index) override;
         double get_stack_value() override;
         void set_stack_value(double value) override;
 };
 
 
-#endif //ICASM_SIMULATEDICINTERFACE_H
+#endif //SIMULATEDICINTERFACE_H

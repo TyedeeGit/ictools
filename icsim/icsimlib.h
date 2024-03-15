@@ -32,5 +32,69 @@
 #include "SimulatedDevice.h"
 #include "SimulatedICInterface.h"
 #include "SimulatedIC.h"
+#include "parser.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef struct {
+    unsigned hash;
+    double value;
+} icsim_device_var;
+
+typedef struct {
+    unsigned hash;
+    double value;
+    int slot;
+} icsim_slot_var;
+
+typedef struct {
+    unsigned hash;
+    double value;
+    ic_reagent_mode mode;
+} icsim_reagent_var;
+
+typedef union {
+    icsim_device_var device_var;
+    icsim_slot_var slot_var;
+    icsim_reagent_var reagent_var;
+} icsim_io_var;
+
+typedef struct {
+    size_t total_var_count;
+    size_t device_var_count;
+    size_t slot_var_count;
+    size_t reagent_var_count;
+    unsigned type_hash;
+    char name[32];
+    icsim_io_var *io_vars;
+} icsim_device;
+
+typedef struct {
+    size_t instruction_count;
+    int pins[7];
+} icsim_chip;
+
+typedef struct {
+    size_t chips_count;
+    size_t devices_count;
+    size_t counts[];
+} icsim_header;
+
+#ifdef __cplusplus
+}
+
+typedef struct icsim_chip_data {
+    SimulatedICInterface interface;
+    SimulatedIC<SimulatedICInterface> chip;
+    icsim_chip *serialized_chip = nullptr;
+    ic_instruction *instructions = nullptr;
+} icsim_chip_data;
+
+void deserialize_device(SimulatedDevice *, icsim_device *);
+void deserialize_interface(SimulatedICInterface *, icsim_header *, std::vector<icsim_device>);
+void deserialize_chip(SimulatedIC<SimulatedICInterface> *, icsim_header *, icsim_chip *, SimulatedICInterface *, ic_instruction []);
+#endif
 
 #endif //ICSIMLIB_H

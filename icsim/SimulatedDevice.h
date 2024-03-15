@@ -20,34 +20,35 @@
  * SOFTWARE.
  */
 
-#ifndef ICASM_SIMULATEDDEVICE_H
-#define ICASM_SIMULATEDDEVICE_H
+#ifndef SIMULATEDDEVICE_H
+#define SIMULATEDDEVICE_H
 
 #include <unordered_map>
 #include "Device.h"
 
+#define DEVICE_SLOTS 3
+
 class SimulatedDevice : public Device {
     private:
         std::unordered_map<unsigned, double> device_properties;
-        std::unordered_map<unsigned, double> device_slots[3];
+        std::unordered_map<unsigned, double> device_slots[DEVICE_SLOTS];
         std::unordered_map<unsigned, double> device_reagents_contents;
         std::unordered_map<unsigned, double> device_reagents_required;
         std::unordered_map<unsigned, double> device_reagents_recipe;
-        bool device_set;
         unsigned device_type_hash;
+        unsigned device_name_hash;
         const char *name;
     public:
-        explicit SimulatedDevice(bool device_is_set = false, unsigned type_hash = 0, const char *device_name = "");
+        explicit SimulatedDevice(unsigned type_hash = 0, const char *device_name = "");
         double get_property(unsigned property_hash) override;
         double get_slot(unsigned slot_var_hash, int slot_num) override;
         double get_reagent(unsigned reagent, ic_reagent_mode reagent_mode) override;
         void set_property(unsigned property_hash, double value) override;
         void set_slot(unsigned slot_var_hash, int slot_num, double value);
         void set_reagent(unsigned reagent, ic_reagent_mode reagent_mode, double value);
-        bool get_device_set() const override;
         unsigned get_device_name_hash() const override;
         unsigned get_device_type_hash() const override;
 };
 
 
-#endif //ICASM_SIMULATEDDEVICE_H
+#endif //SIMULATEDDEVICE_H

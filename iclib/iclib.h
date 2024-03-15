@@ -120,6 +120,7 @@ typedef enum {
 } ic_op_logic;
 
 typedef enum {
+    OP_POKE,
     OP_PEEK,
     OP_POP,
     OP_PUSH
@@ -189,6 +190,12 @@ unsigned int hash(const char *message);
 const char *unhash_property(unsigned int hashed);
 
 #ifdef __cplusplus
+}
+
+template<typename T> inline T *increment_pointer(void **pointer) {
+    auto old_value = (T*) *pointer;
+    *pointer = old_value + 1;
+    return old_value;
 }
 #endif //__cplusplus
 

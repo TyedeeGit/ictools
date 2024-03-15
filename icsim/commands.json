@@ -1,0 +1,19 @@
+{
+  "info": [
+    {
+      "name": "step",
+      "arg_signatures": [[]],
+      "help_message": "Steps the simulation."
+    },
+    {
+      "name": "tick",
+      "arg_signatures": [[], ["max_instructions"]],
+      "help_message": "Ticks the simulation. 128 max instructions will be run by default."
+    },
+    {
+      "name": "run",
+      "arg_signatures": [["ticks"], ["ticks", "max_instructions"]],
+      "help_message": "Runs the simulation for a given number of ticks. 128 max instructions will be run by default."
+    }
+  ]
+}

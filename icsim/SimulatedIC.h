@@ -31,7 +31,7 @@ template <typename T>
 class SimulatedIC {
     protected:
         ic_instruction *instruction_buffer{};
-        int total_instructions{};
+        size_t total_instructions{};
         std::default_random_engine generator;
         std::uniform_real_distribution<double> distribution;
         void handle_branch(ic_instruction current_instruction);
@@ -50,14 +50,14 @@ class SimulatedIC {
         std::unordered_map<unsigned, double> definitions;
         std::unordered_map<unsigned, int> jump_tags;
 
-        SimulatedIC(T *device_interface, ic_instruction *instruction_buffer, int total_instructions);
+        SimulatedIC(T *device_interface, ic_instruction *instruction_buffer, size_t total_instructions);
         double *resolve_register_reference(ic_reference reference);
         inline double *get_register(ic_arg arg);
         inline double *get_register_directly(int i);
         inline double resolve_argument(ic_arg arg);
         inline int resolve_line_number(ic_arg line);
         inline bool compute_compare(ic_instruction instruction);
-        inline int step();
+        inline bool step();
         inline int run_single_tick(unsigned max_instructions = 128);
         inline int run(int ticks = 1, unsigned max_instructions = 128);
 };

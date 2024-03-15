@@ -162,6 +162,9 @@ template <typename T> void SimulatedIC<T>::handle_stack_op(ic_instruction curren
             this->ic_interface->set_stack_value(*current_register);
             (*this->get_register_directly(16))++;
             break;
+        case OP_POKE:
+            this->ic_interface->set_stack_value(*current_register);
+            break;
     }
 }
 
@@ -243,7 +246,7 @@ template <typename T> void SimulatedIC<T>::handle_misc_op(ic_instruction current
     }
 }
 
-template <typename T> SimulatedIC<T>::SimulatedIC(T *device_interface, ic_instruction *instruction_buffer, int total_instructions) { // NOLINT(*-msc51-cpp)
+template <typename T> SimulatedIC<T>::SimulatedIC(T *device_interface, ic_instruction *instruction_buffer, size_t total_instructions) { // NOLINT(*-msc51-cpp)
     this->ic_interface = device_interface;
     this->instruction_buffer = instruction_buffer;
     this->total_instructions = total_instructions;
@@ -340,13 +343,13 @@ template <typename T> bool SimulatedIC<T>::compute_compare(ic_instruction instru
     }
 }
 
-template <typename T> int SimulatedIC<T>::step() {
+template <typename T> bool SimulatedIC<T>::step() {
     if (this->instruction_counter > this->total_instructions)
-        return 2;
+        return true;
     if (this->yielding) {
         if (this->yielding > 0)
             this->yielding--;
-        return 1;
+        return true;
     }
     ic_instruction current_instruction = *(this->instruction_buffer + this->instruction_counter);
     switch (current_instruction.instruction_type) {
@@ -373,16 +376,12 @@ template <typename T> int SimulatedIC<T>::step() {
             break;
     }
     this->instruction_counter++;
-    return 0;
+    return false;
 }
 
 template <typename T> int SimulatedIC<T>::run_single_tick(unsigned max_instructions) {
-    int stop = 0;
     int instructions_run = 0;
-    while (!stop) {
-        instructions_run++;
-        stop = step() | (instructions_run >= max_instructions);
-    }
+    for (; !(step() || (instructions_run >= max_instructions)); instructions_run++);
     return instructions_run;
 }
 

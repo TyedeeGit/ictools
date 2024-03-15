@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#ifndef ICASM_ICINTERFACE_H
-#define ICASM_ICINTERFACE_H
+#ifndef ICINTERFACE_H
+#define ICINTERFACE_H
 
 #include "iclib.h"
 
@@ -45,4 +45,4 @@ class ICInterface {
         virtual void set_stack_value(double value) = 0;
 };
 
-#endif //ICASM_ICINTERFACE_H
+#endif //ICINTERFACE_H

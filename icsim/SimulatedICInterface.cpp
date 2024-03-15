@@ -20,22 +20,26 @@
  * SOFTWARE.
  */
 
+
 #include "SimulatedICInterface.h"
 
-SimulatedICInterface::SimulatedICInterface(int count, SimulatedDevice *devices) {
+SimulatedICInterface::SimulatedICInterface(size_t count, SimulatedDevice *devices[]) {
     this->device_count = count;
-    this->devices = devices;
+    this->devices = std::vector<SimulatedDevice *>(count, reinterpret_cast<SimulatedDevice *const>(devices));
+    this->set_devices = std::vector<int>(7, {});
+    this->registers = std::vector<double>(18, {});
+    this->stack = std::vector<double>(512, {});
 }
 
-SimulatedDevice SimulatedICInterface::find_device(int device) {
-    return this->devices[this->set_devices[device]];
+SimulatedDevice SimulatedICInterface::find_device(int pin) {
+    return *this->devices[this->set_devices[pin]];
 }
 
 int SimulatedICInterface::find_devices(SimulatedDevice found_devices[], unsigned device_hash) {
     int count = 0;
     for (int i = 0; i < this->device_count; i++)
-        if (this->devices[i].get_device_type_hash() == device_hash) {
-            found_devices[count] = this->devices[i];
+        if (this->devices[i]->get_device_type_hash() == device_hash) {
+            found_devices[count] = *this->devices[i];
             count++;
         }
     return count;
@@ -44,8 +48,8 @@ int SimulatedICInterface::find_devices(SimulatedDevice found_devices[], unsigned
 int SimulatedICInterface::find_devices(SimulatedDevice found_devices[], unsigned device_hash, unsigned name_hash) {
     int count = 0;
     for (int i = 0; i < this->device_count; i++)
-        if (this->devices[i].get_device_type_hash() == device_hash & this->devices[i].get_device_name_hash() == name_hash) {
-            found_devices[count] = this->devices[i];
+        if (this->devices[i]->get_device_type_hash() == device_hash & this->devices[i]->get_device_name_hash() == name_hash) {
+            found_devices[count] = *this->devices[i];
             count++;
         }
     return count;
@@ -203,18 +207,30 @@ void SimulatedICInterface::storeb(double value, unsigned property_hash, unsigned
     SimulatedDevice batch_devices[this->device_count];
     int count = this->find_devices(batch_devices, device_hash);
     for (int i = 0; i < count; i++)
-        this->devices[i].set_property(property_hash, value);
+        this->devices[i]->set_property(property_hash, value);
 }
 
 void SimulatedICInterface::storebn(double value, unsigned property_hash, unsigned device_hash, unsigned name_hash)  {
     SimulatedDevice batch_devices[this->device_count];
     int count = this->find_devices(batch_devices, device_hash, name_hash);
     for (int i = 0; i < count; i++)
-        this->devices[i].set_property(property_hash, value);
+        this->devices[i]->set_property(property_hash, value);
 }
 
 inline bool SimulatedICInterface::get_device_set(int device)  {
-    return this->devices[device].get_device_set();
+    struct is_device {
+        const int d;
+        explicit is_device(int n) : d(n) {}
+        bool operator()(int n) const { return d == n;}
+    };
+    return std::any_of(this->set_devices.cbegin(), this->set_devices.cend(), is_device(device));
+}
+
+bool SimulatedICInterface::set_device(int device, int pin) {
+    auto device_was_set = this->get_device_set(device);
+    if (!device_was_set)
+        this->set_devices[pin] = device;
+    return device_was_set;
 }
 
 inline double *SimulatedICInterface::get_register(int register_index)  {
