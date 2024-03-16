@@ -343,7 +343,7 @@ template <typename T> bool SimulatedIC<T>::compute_compare(ic_instruction instru
     }
 }
 
-template <typename T> inline bool SimulatedIC<T>::step() {
+template <typename T> bool SimulatedIC<T>::step() {
     if (this->instruction_counter > this->total_instructions)
         return true;
     if (this->yielding) {

@@ -32,7 +32,7 @@
 #include "SimulatedDevice.h"
 #include "SimulatedICInterface.h"
 #include "SimulatedIC.h"
-#include "parser.h"
+#include "cmd_parser/parser.h"
 
 #ifdef __cplusplus
 extern "C" {
