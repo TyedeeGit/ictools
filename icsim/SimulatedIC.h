@@ -31,7 +31,7 @@ template <typename T>
 class SimulatedIC {
     protected:
         ic_instruction *instruction_buffer{};
-        size_t total_instructions{};
+        uint32_t total_instructions{};
         std::default_random_engine generator;
         std::uniform_real_distribution<double> distribution;
         void handle_branch(ic_instruction current_instruction);
@@ -42,24 +42,24 @@ class SimulatedIC {
         void handle_io_op(ic_instruction current_instruction);
         void handle_misc_op(ic_instruction current_instruction);
     public:
-        int instruction_counter = 0;
-        int yielding = 0;
+        int32_t instruction_counter = 0;
+        int32_t yielding = 0;
         T *ic_interface;
-        std::unordered_map<unsigned, double*> register_aliases;
-        std::unordered_map<unsigned, int> device_aliases;
-        std::unordered_map<unsigned, double> definitions;
-        std::unordered_map<unsigned, int> jump_tags;
+        std::unordered_map<uint32_t, double*> register_aliases;
+        std::unordered_map<uint32_t, int32_t> device_aliases;
+        std::unordered_map<uint32_t, double> definitions;
+        std::unordered_map<uint32_t, int32_t> jump_tags;
 
-        SimulatedIC(T *device_interface, ic_instruction *instruction_buffer, size_t total_instructions);
+        SimulatedIC(T *device_interface, ic_instruction *instruction_buffer, uint32_t total_instructions);
         double *resolve_register_reference(ic_reference reference);
         inline double *get_register(ic_arg arg);
-        inline double *get_register_directly(int i);
+        inline double *get_register_directly(int32_t i);
         inline double resolve_argument(ic_arg arg);
-        inline int resolve_line_number(ic_arg line);
+        inline int32_t resolve_line_number(ic_arg line);
         inline bool compute_compare(ic_instruction instruction);
         inline bool step();
-        inline int run_single_tick(unsigned max_instructions = 128);
-        inline int run(int ticks = 1, unsigned max_instructions = 128);
+        inline uint32_t run_single_tick(uint32_t max_instructions = 128);
+        inline uint32_t run(int32_t ticks = 1, uint32_t max_instructions = 128);
 };
 
 #endif //SIMULATEDIC_H

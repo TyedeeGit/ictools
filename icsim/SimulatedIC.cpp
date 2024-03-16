@@ -27,7 +27,7 @@
 double epsilon = std::numeric_limits<double>::epsilon();
 
 template <typename T> void SimulatedIC<T>::handle_branch(ic_instruction current_instruction) {
-    const int line_number = this->resolve_line_number(current_instruction.args[0])-1;
+    const int32_t line_number = this->resolve_line_number(current_instruction.args[0])-1;
     if (this->compute_compare(current_instruction)) {
         if (current_instruction.instruction_flags & FLAG_RELATIVE)
             this->instruction_counter += line_number; // Relative jump
@@ -170,10 +170,10 @@ template <typename T> void SimulatedIC<T>::handle_stack_op(ic_instruction curren
 
 template <typename T> void SimulatedIC<T>::handle_io_op(ic_instruction current_instruction) {
     double *current_register = this->get_register(current_instruction.args[0]);
-    unsigned device = this->resolve_argument(current_instruction.args[1]);
-    unsigned property_hash = this->resolve_argument(current_instruction.args[2]);
-    unsigned name_hash = this->resolve_argument(current_instruction.args[3]);
-    int slot = this->resolve_argument(current_instruction.args[4]);
+    uint32_t device = this->resolve_argument(current_instruction.args[1]);
+    uint32_t property_hash = this->resolve_argument(current_instruction.args[2]);
+    uint32_t name_hash = this->resolve_argument(current_instruction.args[3]);
+    int32_t slot = this->resolve_argument(current_instruction.args[4]);
     auto batch_mode = (ic_batch_mode) this->resolve_argument(current_instruction.args[5]);
     auto reagent_mode = (ic_reagent_mode) this->resolve_argument(current_instruction.args[6]);
     double value = this->resolve_argument(current_instruction.args[7]);
@@ -218,11 +218,11 @@ template <typename T> void SimulatedIC<T>::handle_io_op(ic_instruction current_i
 }
 
 template <typename T> void SimulatedIC<T>::handle_misc_op(ic_instruction current_instruction) {
-    const int alias = current_instruction.args[0].value.alias;
+    const int32_t alias = current_instruction.args[0].value.alias;
     switch (current_instruction.operation.op_misc) {
         case OP_ALIAS:
             if (current_instruction.instruction_flags & FLAG_DEVICE_ALIAS)
-                this->device_aliases[alias] = (int) this->resolve_argument(current_instruction.args[1]);
+                this->device_aliases[alias] = (int32_t) this->resolve_argument(current_instruction.args[1]);
             else
                 this->register_aliases[alias] = this->get_register(current_instruction.args[1]);
             break;
@@ -233,7 +233,7 @@ template <typename T> void SimulatedIC<T>::handle_misc_op(ic_instruction current
             this->yielding = -1;
             break;
         case OP_SLEEP:
-            this->yielding = (int) current_instruction.args[0].value.int_value/2;
+            this->yielding = (int32_t) current_instruction.args[0].value.int_value/2;
             break;
         case OP_YIELD:
             this->yielding++;
@@ -246,7 +246,7 @@ template <typename T> void SimulatedIC<T>::handle_misc_op(ic_instruction current
     }
 }
 
-template <typename T> SimulatedIC<T>::SimulatedIC(T *device_interface, ic_instruction *instruction_buffer, size_t total_instructions) { // NOLINT(*-msc51-cpp)
+template <typename T> SimulatedIC<T>::SimulatedIC(T *device_interface, ic_instruction *instruction_buffer, uint32_t total_instructions) { // NOLINT(*-msc51-cpp)
     this->ic_interface = device_interface;
     this->instruction_buffer = instruction_buffer;
     this->total_instructions = total_instructions;
@@ -257,8 +257,8 @@ template <typename T> SimulatedIC<T>::SimulatedIC(T *device_interface, ic_instru
 
 template <typename T> double *SimulatedIC<T>::resolve_register_reference(ic_reference reference) {
     double *current_register = this->ic_interface->get_register(reference.value);
-    for (int i = reference.depth-1; i > 0; i--)
-        current_register = this->ic_interface->get_register((int) *current_register);
+    for (int32_t i = reference.depth-1; i > 0; i--)
+        current_register = this->ic_interface->get_register((int32_t) *current_register);
     return current_register;
 }
 
@@ -268,7 +268,7 @@ template <typename T> double *SimulatedIC<T>::get_register(ic_arg arg) {
     return this->resolve_register_reference(arg.value.reference);
 }
 
-template <typename T> double *SimulatedIC<T>::get_register_directly(int i) {
+template <typename T> double *SimulatedIC<T>::get_register_directly(int32_t i) {
     return this->get_register({ARG_REGISTER, {1, i}});
 }
 
@@ -289,8 +289,8 @@ template <typename T> double SimulatedIC<T>::resolve_argument(ic_arg arg) {
     }
 }
 
-template <typename T> int SimulatedIC<T>::resolve_line_number(ic_arg line) {
-    return line.arg_type == ARG_JUMP_TAG ? this->jump_tags[line.value.jump_tag] : (int) this->resolve_argument(line);
+template <typename T> int32_t SimulatedIC<T>::resolve_line_number(ic_arg line) {
+    return line.arg_type == ARG_JUMP_TAG ? this->jump_tags[line.value.jump_tag] : (int32_t) this->resolve_argument(line);
 }
 
 template <typename T> bool SimulatedIC<T>::compute_compare(ic_instruction instruction) {
@@ -298,7 +298,7 @@ template <typename T> bool SimulatedIC<T>::compute_compare(ic_instruction instru
     arg1 = this->resolve_argument(instruction.args[7]);
     arg2 = this->resolve_argument(instruction.args[6]);
     arg3 = this->resolve_argument(instruction.args[5]);
-    int device = (int) this->resolve_argument(instruction.args[7]);
+    auto device = (int32_t) this->resolve_argument(instruction.args[7]);
     switch (instruction.comparison) {
         case COMPARE_NULL:
             return true;
@@ -343,7 +343,7 @@ template <typename T> bool SimulatedIC<T>::compute_compare(ic_instruction instru
     }
 }
 
-template <typename T> bool SimulatedIC<T>::step() {
+template <typename T> inline bool SimulatedIC<T>::step() {
     if (this->instruction_counter > this->total_instructions)
         return true;
     if (this->yielding) {
@@ -379,15 +379,15 @@ template <typename T> bool SimulatedIC<T>::step() {
     return false;
 }
 
-template <typename T> int SimulatedIC<T>::run_single_tick(unsigned max_instructions) {
-    int instructions_run = 0;
+template <typename T> uint32_t SimulatedIC<T>::run_single_tick(uint32_t max_instructions) {
+    uint32_t instructions_run = 0;
     for (; !(step() || (instructions_run >= max_instructions)); instructions_run++);
     return instructions_run;
 }
 
-template <typename T> int SimulatedIC<T>::run(int ticks, unsigned max_instructions) {
-    int instructions_run = 0;
-    for (int i = 0; i < ticks; i++) {
+template <typename T> uint32_t SimulatedIC<T>::run(int32_t ticks, uint32_t max_instructions) {
+    uint32_t instructions_run = 0;
+    for (int32_t i = 0; i < ticks; i++) {
         instructions_run += this->run_single_tick(max_instructions);
     }
     return instructions_run;

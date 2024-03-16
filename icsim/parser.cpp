@@ -119,7 +119,7 @@ bool parse_command(const std::string& command, icsim_console_cmd *cmd) {
     } else     if (cmd_str == "dis" || cmd_str == "disassemble" || cmd_str == "disasm") {
         cmd->command = CMD_DISASM;
         std::string arg;
-        while (iss >> arg && cmd->argc <= 3) {
+        while (iss >> arg && cmd->argc <= 1) {
             cmd->argv[cmd->argc] = new char[arg.size() + 1];
             std::strncpy(cmd->argv[cmd->argc], arg.c_str(), arg.size() + 1);
             cmd->argc++;
@@ -128,12 +128,21 @@ bool parse_command(const std::string& command, icsim_console_cmd *cmd) {
     } else     if (cmd_str == "assemble" || cmd_str == "asm") {
         cmd->command = CMD_ASM;
         std::string arg;
-        while (iss >> arg && cmd->argc <= 1) {
+        while (iss >> arg && cmd->argc <= 2) {
             cmd->argv[cmd->argc] = new char[arg.size() + 1];
             std::strncpy(cmd->argv[cmd->argc], arg.c_str(), arg.size() + 1);
             cmd->argc++;
         }
         return cmd->argc < 1;
+    } else     if (cmd_str == "save") {
+        cmd->command = CMD_SAVE;
+        std::string arg;
+        while (iss >> arg && cmd->argc <= 4) {
+            cmd->argv[cmd->argc] = new char[arg.size() + 1];
+            std::strncpy(cmd->argv[cmd->argc], arg.c_str(), arg.size() + 1);
+            cmd->argc++;
+        }
+        return cmd->argc < 2;
     } else     if (cmd_str == "hash") {
         cmd->command = CMD_HASH;
         std::string arg;
@@ -156,7 +165,7 @@ bool parse_command(const std::string& command, icsim_console_cmd *cmd) {
 }
 
 void free_command(icsim_console_cmd *cmd) {
-    for (size_t i = 0; i < cmd->argc; ++i) {
+    for (uint32_t i = 0; i < cmd->argc; ++i) {
         delete[] cmd->argv[i];
     }
     delete[] cmd->argv;
@@ -193,6 +202,8 @@ icsim_cmd get_command(std::string cmd_str) {
         return CMD_DISASM;
     else     if (cmd_str == "assemble" || cmd_str == "asm")
         return CMD_ASM;
+    else     if (cmd_str == "save")
+        return CMD_SAVE;
     else     if (cmd_str == "hash")
         return CMD_HASH;
     else     if (cmd_str == "help")

@@ -78,14 +78,19 @@
     {
       "name": "disasm",
       "aliases": ["dis", "disassemble"],
-      "arg_signatures": [["chip-id"], ["chip-id", "line"], ["chip-id", "line-start", "line-end"]],
-      "help_message": "Disassemble bytecode."
+      "arg_signatures": [["name"]],
+      "help_message": "Disassemble saved bytecode to MIPS."
     },
     {
       "name": "asm",
       "aliases": ["assemble"],
-      "arg_signatures": [["name"]],
-      "help_message": "Assemble code."
+      "arg_signatures": [["name"], ["name", "num-lines"]],
+      "help_message": "Assemble MIPS and save bytecode into a variable."
+    },
+    {
+      "name": "save",
+      "arg_signatures": [["name", "chip-id"], ["name", "chip-id", "line"], ["name", "chip-id", "line-start", "line-end"]],
+      "help_message": "Save bytecode from a program into a variable."
     },
     {
       "name": "hash",

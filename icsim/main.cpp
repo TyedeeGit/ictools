@@ -22,10 +22,32 @@
 
 #include "main.h"
 
-int process_commands(const std::vector<SimulatedIC<SimulatedICInterface>*>& chips, FILE *output_log) {
+bool step_all_chips(const std::vector<SimulatedIC<SimulatedICInterface>*>& chips) {
+    bool success = true;
+    for (auto chip : chips)
+        success &= chip->step();
+    return success;
+}
+
+uint32_t tick_all_chips(const std::vector<SimulatedIC<SimulatedICInterface>*>& chips, uint32_t max_instructions) {
+    uint32_t i = 0;
+    for (; i < max_instructions; i++) step_all_chips(chips);
+    return i;
+}
+
+uint32_t run_all_chips(const std::vector<SimulatedIC<SimulatedICInterface>*>& chips, uint32_t ticks, uint32_t max_instructions) {
+    uint32_t instructions_run = 0;
+    for (uint32_t i = 0; i < ticks; i++, instructions_run += tick_all_chips(chips, max_instructions));
+    return instructions_run;
+}
+
+int32_t process_commands(const std::vector<SimulatedIC<SimulatedICInterface>*>& chips, FILE *output_log) {
     std::string command_string;
     std::stringstream error_stream;
     icsim_console_cmd command;
+    uint32_t max_instructions;
+    uint32_t ticks;
+    char *endptr;
     bool parsing_failed;
     while (true) {
         std::cerr << error_stream.str();
@@ -54,15 +76,33 @@ int process_commands(const std::vector<SimulatedIC<SimulatedICInterface>*>& chip
                     if (get_command(command.argv[0]) == CMD_UNKNOWN)
                         error_stream << "Unknown command. Type 'help' for a list of commands.\n";
                     else
-                        print_usage((icsim_cmd)(((int) get_command(command.argv[0])) - 1));
+                        print_usage((icsim_cmd)(((int32_t) get_command(command.argv[0])) - 1));
                 break;
             case CMD_QUIT:
                 return 0;
             case CMD_STEP:
+                step_all_chips(chips);
                 break;
             case CMD_TICK:
+                max_instructions = MAX_INSTRUCTIONS;
+                if (command.argc == 2) {
+                    max_instructions = strtoul(command.argv[1], &endptr, 10);
+                    if (strlen(endptr)) {
+                        error_stream << "Argument should be an unsigned integer!";
+                        break;
+                    }
+                }
+                tick_all_chips(chips, max_instructions);
                 break;
             case CMD_RUN:
+                max_instructions = MAX_INSTRUCTIONS;
+                if (command.argc == 2) {
+                    max_instructions = strtoul(command.argv[1], &endptr, 10);
+                    if (strlen(endptr)) {
+                        error_stream << "Argument should be an unsigned integer!";
+                        break;
+                    }
+                }
                 break;
             case CMD_INFO:
                 break;
@@ -86,6 +126,8 @@ int process_commands(const std::vector<SimulatedIC<SimulatedICInterface>*>& chip
                 break;
             case CMD_ASM:
                 break;
+            case CMD_SAVE:
+                break;
         }
     }
 }
@@ -97,7 +139,7 @@ void print_help() {
     printf("  [[-l | --log] [output]]     Log output to file\n");
 }
 
-int main(int argc, char *argv[]) {
+int32_t main(int32_t argc, char *argv[]) {
     if (argc < 2 || argc > 4) {
         print_help();
         return 1;
@@ -137,11 +179,11 @@ int main(int argc, char *argv[]) {
     std::vector<icsim_chip_data> chips_data;
     std::vector<std::vector<ic_instruction>> instruction_data;
     std::vector<std::vector<icsim_io_var>> var_data;
-    size_t devices_consumed = 0;
-    size_t chips_consumed = 0;
-    size_t instructions_consumed = 0;
-    size_t vars_consumed = 0;
-    size_t bytes_to_consume = 0;
+    uint32_t devices_consumed = 0;
+    uint32_t chips_consumed = 0;
+    uint32_t instructions_consumed = 0;
+    uint32_t vars_consumed = 0;
+    uint32_t bytes_to_consume = 0;
 
     bool consuming_instuctions = false;
     bool consuming_vars = false;
@@ -191,7 +233,7 @@ int main(int argc, char *argv[]) {
     fclose(input_file);
 
     std::vector<SimulatedIC<SimulatedICInterface>*> chips(header.chips_count);
-    int i = 0;
+    int32_t i = 0;
     for (auto chip_data : chips_data) {
         deserialize_interface(&chip_data.interface, &header, serialized_devices);
         deserialize_chip(&chip_data.chip, &header, chip_data.serialized_chip, &chip_data.interface, chip_data.instructions);

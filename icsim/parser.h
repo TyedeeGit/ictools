@@ -29,13 +29,13 @@
 #include <vector>
 #include <cstring>
 #define MAX_ARG_COUNT 6
-#define TOTAL_COMMANDS 16
+#define TOTAL_COMMANDS 17
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-static const char* main_help_message = "List of commands:\n    step: Steps the simulation.\n        step \n\n    tick: Ticks the simulation. 128 max instructions will be run by default.\n        tick \n        tick <max-instructions>\n\n    run: Runs the simulation for a given number of ticks. 128 max instructions will be run by default.\n        run <ticks>\n        run <ticks> <max-instructions>\n\n    info: Read the value of a register or address.\n        info <chip-id> <register|address> <register-or-address>\n\n    load: Read a property of a device or several devices.\n        load <d> <chip-id> <device-pin> <property>\n        load <b> <device-hash> <property> <batch-mode>\n        load <bn> <device-hash> <property> <batch-mode> <name-hash>\n        load <s> <chip-id> <device-pin> <slot-property> <slot>\n        load <sb> <device-hash> <slot-property> <batch-mode> <slot>\n        load <sbn> <device-hash> <slot-property> <batch-mode> <name-hash> <slot>\n        load <r> <chip-id> <device-pin> <reagent-hash> <reagent-mode>\n        load <rb> <device-hash> <reagent-hash> <batch-mode> <reagent-mode>\n        load <rbn> <device-hash> <reagent-hash> <batch-mode> <name-hash> <reagent-mode>\n\n    store: Write a property of a device or several devices.\n        store <d> <chip-id> <device-pin> <property>\n        store <b> <device-hash> <property> <value>\n        store <bn> <device-hash> <property> <value> <name-hash>\n        store <s> <chip-id> <device-pin> <slot-property> <slot>\n        store <sb> <device-hash> <slot-property> <value> <slot>\n        store <sbn> <device-hash> <slot-property> <value> <name-hash> <slot>\n        store <r> <chip-id> <device-pin> <reagent-hash> <reagent-mode>\n        store <rb> <device-hash> <reagent-hash> <value> <reagent-mode>\n        store <rbn> <device-hash> <reagent-hash> <value> <name-hash> <reagent-mode>\n\n    set: Set the value of a register or address.\n        set <chip-id> <register|address> <register-or-address> <value>\n\n    watch: Watch the value of a register or address.\n        watch <chip-id> <register|address> <register-or-address>\n\n    break: Set a breakpoint.\n        break <line>\n\n    jump: Jump to line or function.\n        jump <line>\n        jump <function>\n\n    return: Jump to return address.\n        return \n\n    disasm: Disassemble bytecode.\n        disasm <chip-id>\n        disasm <chip-id> <line>\n        disasm <chip-id> <line-start> <line-end>\n        dis <chip-id>\n        dis <chip-id> <line>\n        dis <chip-id> <line-start> <line-end>\n        disassemble <chip-id>\n        disassemble <chip-id> <line>\n        disassemble <chip-id> <line-start> <line-end>\n\n    asm: Assemble code.\n        asm <name>\n        assemble <name>\n\n    hash: Hash a string.\n        hash \n\n    help: Displays usage of the command given. Displays all commands if no argument is provided\n        help \n        help <command>\n\n    quit: Exits icsim\n        quit \n        exit \n";
+static const char* main_help_message = "List of commands:\n    step: Steps the simulation.\n        step \n\n    tick: Ticks the simulation. 128 max instructions will be run by default.\n        tick \n        tick <max-instructions>\n\n    run: Runs the simulation for a given number of ticks. 128 max instructions will be run by default.\n        run <ticks>\n        run <ticks> <max-instructions>\n\n    info: Read the value of a register or address.\n        info <chip-id> <register|address> <register-or-address>\n\n    load: Read a property of a device or several devices.\n        load <d> <chip-id> <device-pin> <property>\n        load <b> <device-hash> <property> <batch-mode>\n        load <bn> <device-hash> <property> <batch-mode> <name-hash>\n        load <s> <chip-id> <device-pin> <slot-property> <slot>\n        load <sb> <device-hash> <slot-property> <batch-mode> <slot>\n        load <sbn> <device-hash> <slot-property> <batch-mode> <name-hash> <slot>\n        load <r> <chip-id> <device-pin> <reagent-hash> <reagent-mode>\n        load <rb> <device-hash> <reagent-hash> <batch-mode> <reagent-mode>\n        load <rbn> <device-hash> <reagent-hash> <batch-mode> <name-hash> <reagent-mode>\n\n    store: Write a property of a device or several devices.\n        store <d> <chip-id> <device-pin> <property>\n        store <b> <device-hash> <property> <value>\n        store <bn> <device-hash> <property> <value> <name-hash>\n        store <s> <chip-id> <device-pin> <slot-property> <slot>\n        store <sb> <device-hash> <slot-property> <value> <slot>\n        store <sbn> <device-hash> <slot-property> <value> <name-hash> <slot>\n        store <r> <chip-id> <device-pin> <reagent-hash> <reagent-mode>\n        store <rb> <device-hash> <reagent-hash> <value> <reagent-mode>\n        store <rbn> <device-hash> <reagent-hash> <value> <name-hash> <reagent-mode>\n\n    set: Set the value of a register or address.\n        set <chip-id> <register|address> <register-or-address> <value>\n\n    watch: Watch the value of a register or address.\n        watch <chip-id> <register|address> <register-or-address>\n\n    break: Set a breakpoint.\n        break <line>\n\n    jump: Jump to line or function.\n        jump <line>\n        jump <function>\n\n    return: Jump to return address.\n        return \n\n    disasm: Disassemble saved bytecode to MIPS.\n        disasm <name>\n        dis <name>\n        disassemble <name>\n\n    asm: Assemble MIPS and save bytecode into a variable.\n        asm <name>\n        asm <name> <num-lines>\n        assemble <name>\n        assemble <name> <num-lines>\n\n    save: Save bytecode from a program into a variable.\n        save <name> <chip-id>\n        save <name> <chip-id> <line>\n        save <name> <chip-id> <line-start> <line-end>\n\n    hash: Hash a string.\n        hash \n\n    help: Displays usage of the command given. Displays all commands if no argument is provided\n        help \n        help <command>\n\n    quit: Exits icsim\n        quit \n        exit \n";
 static const char* command_names[TOTAL_COMMANDS] = {
    "step",
    "tick",
@@ -50,6 +50,7 @@ static const char* command_names[TOTAL_COMMANDS] = {
    "return",
    "disasm",
    "asm",
+   "save",
    "hash",
    "help",
    "quit",
@@ -67,8 +68,9 @@ static const char* help_messages[TOTAL_COMMANDS] = {
     "break: Set a breakpoint.\n    break <line>\n",
     "jump: Jump to line or function.\n    jump <line>\n    jump <function>\n",
     "return: Jump to return address.\n    return \n",
-    "disasm: Disassemble bytecode.\n    disasm <chip-id>\n    disasm <chip-id> <line>\n    disasm <chip-id> <line-start> <line-end>\n    dis <chip-id>\n    dis <chip-id> <line>\n    dis <chip-id> <line-start> <line-end>\n    disassemble <chip-id>\n    disassemble <chip-id> <line>\n    disassemble <chip-id> <line-start> <line-end>\n",
-    "asm: Assemble code.\n    asm <name>\n    assemble <name>\n",
+    "disasm: Disassemble saved bytecode to MIPS.\n    disasm <name>\n    dis <name>\n    disassemble <name>\n",
+    "asm: Assemble MIPS and save bytecode into a variable.\n    asm <name>\n    asm <name> <num-lines>\n    assemble <name>\n    assemble <name> <num-lines>\n",
+    "save: Save bytecode from a program into a variable.\n    save <name> <chip-id>\n    save <name> <chip-id> <line>\n    save <name> <chip-id> <line-start> <line-end>\n",
     "hash: Hash a string.\n    hash \n",
     "help: Displays usage of the command given. Displays all commands if no argument is provided\n    help \n    help <command>\n",
     "quit: Exits icsim\n    quit \n    exit \n",
@@ -89,6 +91,7 @@ typedef enum {
     CMD_RETURN,
     CMD_DISASM,
     CMD_ASM,
+    CMD_SAVE,
     CMD_HASH,
     CMD_HELP,
     CMD_QUIT,
@@ -96,7 +99,7 @@ typedef enum {
 
 typedef struct {
     icsim_cmd command;
-    size_t argc;
+    uint32_t argc;
     char** argv;
 } icsim_console_cmd;
 

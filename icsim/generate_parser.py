@@ -98,7 +98,7 @@ extern "C" {{
     header_code += 'typedef struct {\n'
 
     header_code += f'''    icsim_cmd command;
-    size_t argc;
+    uint32_t argc;
     char** argv;
 }} icsim_console_cmd;
 
@@ -156,7 +156,7 @@ bool parse_command(const std::string& command, icsim_console_cmd *cmd) {{
 }
 
 void free_command(icsim_console_cmd *cmd) {
-    for (size_t i = 0; i < cmd->argc; ++i) {
+    for (uint32_t i = 0; i < cmd->argc; ++i) {
         delete[] cmd->argv[i];
     }
     delete[] cmd->argv;

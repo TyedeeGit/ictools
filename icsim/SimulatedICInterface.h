@@ -30,31 +30,31 @@
 
 class SimulatedICInterface : public ICInterface {
     protected:
-        size_t device_count;
+        uint32_t device_count;
         std::vector<double> registers;
         std::vector<double> stack;
-        std::vector<int> set_devices;
+        std::vector<int32_t> set_devices;
         std::vector<SimulatedDevice *> devices;
     public:
-        explicit SimulatedICInterface(size_t count = 0, SimulatedDevice *devices[] = nullptr);
-        inline SimulatedDevice find_device(int pin);
-        int find_devices(SimulatedDevice found_devices[], unsigned device_hash);
-        int find_devices(SimulatedDevice found_devices[], unsigned device_hash, unsigned name_hash);
-        double loadd(unsigned property_hash, int device) override;
-        double loadb(unsigned property_hash, unsigned device_hash, ic_batch_mode batch_mode) override;
-        double loadbn(unsigned property_hash, unsigned device_hash, ic_batch_mode batch_mode, unsigned name_hash) override;
-        double loadrd(unsigned reagent_hash, int device, ic_reagent_mode reagent_mode) override;
-        double loadrb(unsigned reagent_hash, unsigned device_hash, ic_reagent_mode reagent_mode, ic_batch_mode batch_mode) override;
-        double loadrbn(unsigned reagent_hash, unsigned device_hash, ic_reagent_mode reagent_mode, ic_batch_mode batch_mode, unsigned name_hash) override;
-        double loadsd(unsigned slot_var, int device, int slot) override;
-        double loadsb(unsigned slot_var, unsigned device_hash, int slot, ic_batch_mode batch_mode) override;
-        double loadsbn(unsigned slot_var, unsigned device_hash, int slot, ic_batch_mode batch_mode, unsigned name_hash) override;
-        void stored(double value, unsigned property_hash, int device) override;
-        void storeb(double value, unsigned property_hash, unsigned device_hash) override;
-        void storebn(double value, unsigned property_hash, unsigned device_hash, unsigned name_hash) override;
-        bool get_device_set(int device) override;
-        bool set_device(int device, int pin);
-        double *get_register(int register_index) override;
+        explicit SimulatedICInterface(uint32_t count = 0, SimulatedDevice *devices[] = nullptr);
+        inline SimulatedDevice find_device(int32_t pin);
+        int32_t find_devices(SimulatedDevice found_devices[], uint32_t device_hash);
+        int32_t find_devices(SimulatedDevice found_devices[], uint32_t device_hash, uint32_t name_hash);
+        double loadd(uint32_t property_hash, int32_t device) override;
+        double loadb(uint32_t property_hash, uint32_t device_hash, ic_batch_mode batch_mode) override;
+        double loadbn(uint32_t property_hash, uint32_t device_hash, ic_batch_mode batch_mode, uint32_t name_hash) override;
+        double loadrd(uint32_t reagent_hash, int32_t device, ic_reagent_mode reagent_mode) override;
+        double loadrb(uint32_t reagent_hash, uint32_t device_hash, ic_reagent_mode reagent_mode, ic_batch_mode batch_mode) override;
+        double loadrbn(uint32_t reagent_hash, uint32_t device_hash, ic_reagent_mode reagent_mode, ic_batch_mode batch_mode, uint32_t name_hash) override;
+        double loadsd(uint32_t slot_var, int32_t device, int32_t slot) override;
+        double loadsb(uint32_t slot_var, uint32_t device_hash, int32_t slot, ic_batch_mode batch_mode) override;
+        double loadsbn(uint32_t slot_var, uint32_t device_hash, int32_t slot, ic_batch_mode batch_mode, uint32_t name_hash) override;
+        void stored(double value, uint32_t property_hash, int32_t device) override;
+        void storeb(double value, uint32_t property_hash, uint32_t device_hash) override;
+        void storebn(double value, uint32_t property_hash, uint32_t device_hash, uint32_t name_hash) override;
+        bool get_device_set(int32_t device) override;
+        bool set_device(int32_t device, int32_t pin);
+        double *get_register(int32_t register_index) override;
         double get_stack_value() override;
         void set_stack_value(double value) override;
 };

@@ -27,12 +27,12 @@
 
 class Device {
     public:
-        virtual double get_property(unsigned property_hash) = 0;
-        virtual double get_slot(unsigned slot_var_hash, int slot_num) = 0;
-        virtual double get_reagent(unsigned reagent, ic_reagent_mode reagent_mode) = 0;
-        virtual void set_property(unsigned property_hash, double value) = 0;
-        virtual unsigned get_device_name_hash() const = 0;
-        virtual unsigned get_device_type_hash() const = 0;
+        virtual double get_property(uint32_t property_hash) = 0;
+        virtual double get_slot(uint32_t slot_var_hash, int32_t slot_num) = 0;
+        virtual double get_reagent(uint32_t reagent, ic_reagent_mode reagent_mode) = 0;
+        virtual void set_property(uint32_t property_hash, double value) = 0;
+        virtual uint32_t get_device_name_hash() const = 0;
+        virtual uint32_t get_device_type_hash() const = 0;
 };
 
 #endif //DEVICE_H
