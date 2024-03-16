@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.27)
 project(iclib C)
 project(icsim CXX)
-project(icasm_parser C)
 project(icasm CXX)
 
 find_package(Python)
@@ -52,7 +51,6 @@ add_library(icasmlib
         ${ICASM_DIR}/icasmlib.cpp
         ${ICASM_DIR}/icasmlib.h)
 target_link_libraries(icasmlib iclib)
-add_dependencies(icasmlib iclib)
 
 # Build icsim_parser
 set(COMMANDS_JSON ${ICSIM_PARSER_DIR}/commands.json)
@@ -81,23 +79,16 @@ add_library(icsimlib
 target_link_libraries(icsimlib iclib)
 target_link_libraries(icsimlib icasmlib)
 target_link_libraries(icsimlib icsim_parser)
-add_dependencies(icsimlib iclib)
-add_dependencies(icsimlib icasmlib)
-add_dependencies(icsimlib icsim_parser)
 
 # Build icsim
 add_executable(icsim ${ICSIM_DIR}/main.cpp)
 target_link_libraries(icsim icsimlib)
-add_dependencies(icsim icsimlib)
 
 # Build icasm
 add_executable(icasm ${ICASM_DIR}/main.cpp)
 target_link_libraries(icasm icasmlib)
 target_link_libraries(icasm icsimlib)
 target_link_libraries(icasm icasm_parser)
-add_dependencies(icasm icasmlib)
-add_dependencies(icasm icsimlib)
-add_dependencies(icasm icasm_parser)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 11)
