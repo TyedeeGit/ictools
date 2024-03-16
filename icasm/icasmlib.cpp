@@ -20,25 +20,4 @@
  * SOFTWARE.
  */
 
-#ifndef MAIN_H
-#define MAIN_H
-#define MAX_INSTRUCTIONS 128
-
-#include <cstdio>
-#include <cstring>
-#include <unordered_set>
-#include "icsimlib.h"
-#include "cmd_parser/cmd_parser.h"
-
-static std::unordered_set<icsim_breakpoint> breakpoints();
-static std::unordered_set<icsim_var_watch> watches();
-static std::unordered_map<std::string, std::vector<ic_instruction>> assembled_instructions;
-
-inline bool step_all_chips(const std::vector<SimulatedIC<SimulatedICInterface>*>&);
-inline uint32_t tick_all_chips(const std::vector<SimulatedIC<SimulatedICInterface>*>&, uint32_t = MAX_INSTRUCTIONS);
-uint32_t run_all_chips(const std::vector<SimulatedIC<SimulatedICInterface>*>&, uint32_t, uint32_t = MAX_INSTRUCTIONS);
-int process_commands(const std::vector<SimulatedIC<SimulatedICInterface>*>&, FILE * = nullptr);
-void print_help();
-int main(int argc, char *argv[]);
-
-#endif //MAIN_H
+#include "icasmlib.h"

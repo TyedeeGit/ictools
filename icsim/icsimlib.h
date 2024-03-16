@@ -32,25 +32,24 @@
 #include "SimulatedDevice.h"
 #include "SimulatedICInterface.h"
 #include "SimulatedIC.h"
-#include "parser.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 typedef struct {
-    unsigned hash;
+    uint32_t hash;
     double value;
 } icsim_device_var;
 
 typedef struct {
-    unsigned hash;
+    uint32_t hash;
     double value;
-    int slot;
+    int32_t slot;
 } icsim_slot_var;
 
 typedef struct {
-    unsigned hash;
+    uint32_t hash;
     double value;
     ic_reagent_mode mode;
 } icsim_reagent_var;
@@ -62,25 +61,41 @@ typedef union {
 } icsim_io_var;
 
 typedef struct {
-    size_t total_var_count;
-    size_t device_var_count;
-    size_t slot_var_count;
-    size_t reagent_var_count;
-    unsigned type_hash;
+    uint32_t total_var_count;
+    uint32_t device_var_count;
+    uint32_t slot_var_count;
+    uint32_t reagent_var_count;
+    uint32_t type_hash;
     char name[32];
     icsim_io_var *io_vars;
 } icsim_device;
 
 typedef struct {
-    size_t instruction_count;
-    int pins[7];
+    uint32_t instruction_count;
+    int32_t pins[7];
 } icsim_chip;
 
 typedef struct {
-    size_t chips_count;
-    size_t devices_count;
-    size_t counts[];
+    uint32_t chips_count;
+    uint32_t devices_count;
+    uint32_t counts[];
 } icsim_header;
+
+typedef struct {
+    uint32_t chip_id;
+    uint32_t line;
+} icsim_breakpoint;
+
+typedef struct {
+    enum {
+        WATCH_REGISTER,
+        WATCH_MEMORY,
+        WATCH_PROPETY,
+        WATCH_SLOT,
+        WATCH_REAGENT
+    } watch_var_type;
+    uint32_t watch_var;
+} icsim_var_watch;
 
 #ifdef __cplusplus
 }

@@ -59,8 +59,8 @@ def generate_cpp_parser(commands_info):
     help_message += '\\n'.join(messages)
 
     # Generate the header file content
-    header_code = f'''{cpp_license}\n#ifndef PARSER_H
-#define PARSER_H
+    header_code = f'''{cpp_license}\n#ifndef CMD_PARSER_H
+#define CMD_PARSER_H
 
 #include <iostream>
 #include <sstream>
@@ -98,7 +98,7 @@ extern "C" {{
     header_code += 'typedef struct {\n'
 
     header_code += f'''    icsim_cmd command;
-    size_t argc;
+    uint32_t argc;
     char** argv;
 }} icsim_console_cmd;
 
@@ -113,11 +113,11 @@ icsim_cmd get_command(std::string command);
 #ifdef __cplusplus
 }}
 #endif
-#endif //PARSER_H
+#endif //CMD_PARSER_H
 '''
 
     # Generate the implementation file content
-    implementation_code = f'''{cpp_license}\n#include "parser.h"
+    implementation_code = f'''{cpp_license}\n#include "cmd_parser.h"
 
 bool parse_command(const std::string& command, icsim_console_cmd *cmd) {{
     std::istringstream iss(command);
@@ -156,7 +156,7 @@ bool parse_command(const std::string& command, icsim_console_cmd *cmd) {{
 }
 
 void free_command(icsim_console_cmd *cmd) {
-    for (size_t i = 0; i < cmd->argc; ++i) {
+    for (uint32_t i = 0; i < cmd->argc; ++i) {
         delete[] cmd->argv[i];
     }
     delete[] cmd->argv;
@@ -197,10 +197,10 @@ def main():
 
     header_content, implementation_content = generate_cpp_parser(commands_info)
 
-    with open('parser.h', 'w') as header_file:
+    with open('cmd_parser.h', 'w') as header_file:
         header_file.write(header_content)
 
-    with open('parser.cpp', 'w') as implementation_file:
+    with open('cmd_parser.cpp', 'w') as implementation_file:
         implementation_file.write(implementation_content)
 
 

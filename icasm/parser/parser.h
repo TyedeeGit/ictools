@@ -20,25 +20,33 @@
  * SOFTWARE.
  */
 
-#ifndef MAIN_H
-#define MAIN_H
-#define MAX_INSTRUCTIONS 128
+#ifndef PARSER_H
+#define PARSER_H
 
+#ifdef __cplusplus
 #include <cstdio>
-#include <cstring>
-#include <unordered_set>
-#include "icsimlib.h"
-#include "cmd_parser/cmd_parser.h"
+#include <cinttypes>
+#include <iostream>
+#include <sstream>
+extern "C" {
+#else
+#include <stdio.h>
+#include <stdlib.h>
+#include <inttypes.h>
+#endif
 
-static std::unordered_set<icsim_breakpoint> breakpoints();
-static std::unordered_set<icsim_var_watch> watches();
-static std::unordered_map<std::string, std::vector<ic_instruction>> assembled_instructions;
+extern int yyparse_string(const char *str);
+extern int yyparse();
+extern FILE *yyin;
 
-inline bool step_all_chips(const std::vector<SimulatedIC<SimulatedICInterface>*>&);
-inline uint32_t tick_all_chips(const std::vector<SimulatedIC<SimulatedICInterface>*>&, uint32_t = MAX_INSTRUCTIONS);
-uint32_t run_all_chips(const std::vector<SimulatedIC<SimulatedICInterface>*>&, uint32_t, uint32_t = MAX_INSTRUCTIONS);
-int process_commands(const std::vector<SimulatedIC<SimulatedICInterface>*>&, FILE * = nullptr);
-void print_help();
-int main(int argc, char *argv[]);
+typedef struct {
+    char *instruction;
+    uint32_t argc;
+    char *argv[];
+} yyinstruction;
 
-#endif //MAIN_H
+
+#ifdef __cplusplus
+}
+#endif
+#endif //PARSER_H

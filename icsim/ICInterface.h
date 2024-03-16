@@ -27,20 +27,20 @@
 
 class ICInterface {
     public:
-        virtual double loadd(unsigned property_hash, int device) = 0;
-        virtual double loadb(unsigned property_hash, unsigned device_hash, ic_batch_mode batch_mode) = 0;
-        virtual double loadbn(unsigned property_hash, unsigned device_hash, ic_batch_mode batch_mode, unsigned name_hash) = 0;
-        virtual double loadrd(unsigned reagent_hash, int device, ic_reagent_mode reagent_mode) = 0;
-        virtual double loadrb(unsigned reagent_hash, unsigned device_hash, ic_reagent_mode reagent_mode, ic_batch_mode batch_mode) = 0;
-        virtual double loadrbn(unsigned reagent_hash, unsigned device_hash, ic_reagent_mode reagent_mode, ic_batch_mode batch_mode, unsigned name_hash) = 0;
-        virtual double loadsd(unsigned slot_var, int device, int slot) = 0;
-        virtual double loadsb(unsigned slot_var, unsigned device_hash, int slot, ic_batch_mode batch_mode) = 0;
-        virtual double loadsbn(unsigned slot_var, unsigned device_hash, int slot, ic_batch_mode batch_mode, unsigned name_hash) = 0;
-        virtual void stored(double value, unsigned property_hash, int device) = 0;
-        virtual void storeb(double value, unsigned property_hash, unsigned device_hash) = 0;
-        virtual void storebn(double value, unsigned property_hash, unsigned device_hash, unsigned name_hash) = 0;
-        virtual bool get_device_set(int device) = 0;
-        virtual double *get_register(int register_index) = 0;
+        virtual double loadd(uint32_t property_hash, int32_t device) = 0;
+        virtual double loadb(uint32_t property_hash, uint32_t device_hash, ic_batch_mode batch_mode) = 0;
+        virtual double loadbn(uint32_t property_hash, uint32_t device_hash, ic_batch_mode batch_mode, uint32_t name_hash) = 0;
+        virtual double loadrd(uint32_t reagent_hash, int32_t device, ic_reagent_mode reagent_mode) = 0;
+        virtual double loadrb(uint32_t reagent_hash, uint32_t device_hash, ic_reagent_mode reagent_mode, ic_batch_mode batch_mode) = 0;
+        virtual double loadrbn(uint32_t reagent_hash, uint32_t device_hash, ic_reagent_mode reagent_mode, ic_batch_mode batch_mode, uint32_t name_hash) = 0;
+        virtual double loadsd(uint32_t slot_var, int32_t device, int32_t slot) = 0;
+        virtual double loadsb(uint32_t slot_var, uint32_t device_hash, int32_t slot, ic_batch_mode batch_mode) = 0;
+        virtual double loadsbn(uint32_t slot_var, uint32_t device_hash, int32_t slot, ic_batch_mode batch_mode, uint32_t name_hash) = 0;
+        virtual void stored(double value, uint32_t property_hash, int32_t device) = 0;
+        virtual void storeb(double value, uint32_t property_hash, uint32_t device_hash) = 0;
+        virtual void storebn(double value, uint32_t property_hash, uint32_t device_hash, uint32_t name_hash) = 0;
+        virtual bool get_device_set(int32_t device) = 0;
+        virtual double *get_register(int32_t register_index) = 0;
         virtual double get_stack_value() = 0;
         virtual void set_stack_value(double value) = 0;
 };

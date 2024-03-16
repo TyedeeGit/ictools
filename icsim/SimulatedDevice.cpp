@@ -22,21 +22,21 @@
 
 #include "SimulatedDevice.h"
 
-SimulatedDevice::SimulatedDevice(unsigned type_hash, const char *device_name) {
+SimulatedDevice::SimulatedDevice(uint32_t type_hash, const char *device_name) {
     this->name = device_name;
     this->device_name_hash = this->get_device_name_hash();
     this->device_type_hash = type_hash;
 }
 
-inline double SimulatedDevice::get_property(unsigned property_hash)  {
+inline double SimulatedDevice::get_property(uint32_t property_hash)  {
     return this->device_properties[property_hash];
 }
 
-inline double SimulatedDevice::get_slot(unsigned slot_var_hash, int slot_num)  {
+inline double SimulatedDevice::get_slot(uint32_t slot_var_hash, int32_t slot_num)  {
     return this->device_slots[slot_num][slot_var_hash];
 }
 
-inline double SimulatedDevice::get_reagent(unsigned reagent, ic_reagent_mode reagent_mode)  {
+inline double SimulatedDevice::get_reagent(uint32_t reagent, ic_reagent_mode reagent_mode)  {
     switch (reagent_mode) {
         case REAGENT_CONTENTS:
             return this->device_reagents_contents[reagent];
@@ -45,15 +45,15 @@ inline double SimulatedDevice::get_reagent(unsigned reagent, ic_reagent_mode rea
     }
 }
 
-inline void SimulatedDevice::set_property(unsigned property_hash, double value)   {
+inline void SimulatedDevice::set_property(uint32_t property_hash, double value)   {
     this->device_properties[property_hash] = value;
 }
 
-void SimulatedDevice::set_slot(unsigned slot_var_hash, int slot_num, double value) {
+void SimulatedDevice::set_slot(uint32_t slot_var_hash, int32_t slot_num, double value) {
     this->device_slots[slot_num][slot_var_hash] = value;
 }
 
-void SimulatedDevice::set_reagent(unsigned reagent, ic_reagent_mode reagent_mode, double value) {
+void SimulatedDevice::set_reagent(uint32_t reagent, ic_reagent_mode reagent_mode, double value) {
     switch (reagent_mode) {
         case REAGENT_CONTENTS:
             this->device_reagents_contents[reagent] = value;
@@ -64,10 +64,10 @@ void SimulatedDevice::set_reagent(unsigned reagent, ic_reagent_mode reagent_mode
     }
 }
 
-inline unsigned SimulatedDevice::get_device_name_hash() const  {
+inline uint32_t SimulatedDevice::get_device_name_hash() const  {
     return hash(this->name);
 }
 
-inline unsigned SimulatedDevice::get_device_type_hash() const  {
+inline uint32_t SimulatedDevice::get_device_type_hash() const  {
     return this->device_type_hash;
 }

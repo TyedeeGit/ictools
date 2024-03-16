@@ -25,7 +25,10 @@
 #define ICLIB_H
 
 #ifdef __cplusplus
+#include <cinttypes>
 extern "C" {
+#else
+#include <inttypes.h>
 #endif
 
 const int FLAG_AL = 1;
