@@ -7,13 +7,90 @@
     },
     {
       "name": "tick",
-      "arg_signatures": [[], ["max_instructions"]],
+      "arg_signatures": [[], ["max-instructions"]],
       "help_message": "Ticks the simulation. 128 max instructions will be run by default."
     },
     {
       "name": "run",
-      "arg_signatures": [["ticks"], ["ticks", "max_instructions"]],
+      "arg_signatures": [["ticks"], ["ticks", "max-instructions"]],
       "help_message": "Runs the simulation for a given number of ticks. 128 max instructions will be run by default."
+    },
+    {
+      "name": "info",
+      "arg_signatures": [["chip-id", "register|address", "register-or-address"]],
+      "help_message": "Read the value of a register or address."
+    },
+    {
+      "name": "load",
+      "arg_signatures": [
+        ["d", "chip-id", "device-pin", "property"],
+        ["b", "device-hash", "property", "batch-mode"],
+        ["bn", "device-hash", "property", "batch-mode", "name-hash"],
+        ["s", "chip-id", "device-pin", "slot-property", "slot"],
+        ["sb", "device-hash", "slot-property", "batch-mode", "slot"],
+        ["sbn", "device-hash", "slot-property", "batch-mode", "name-hash", "slot"],
+        ["r", "chip-id", "device-pin", "reagent-hash", "reagent-mode"],
+        ["rb", "device-hash", "reagent-hash", "batch-mode", "reagent-mode"],
+        ["rbn", "device-hash", "reagent-hash", "batch-mode", "name-hash", "reagent-mode"]
+      ],
+      "help_message": "Read a property of a device or several devices."
+    },
+    {
+      "name": "store",
+      "arg_signatures": [
+        ["d", "chip-id", "device-pin", "property"],
+        ["b", "device-hash", "property", "value"],
+        ["bn", "device-hash", "property", "value", "name-hash"],
+        ["s", "chip-id", "device-pin", "slot-property", "slot"],
+        ["sb", "device-hash", "slot-property", "value", "slot"],
+        ["sbn", "device-hash", "slot-property", "value", "name-hash", "slot"],
+        ["r", "chip-id", "device-pin", "reagent-hash", "reagent-mode"],
+        ["rb", "device-hash", "reagent-hash", "value", "reagent-mode"],
+        ["rbn", "device-hash", "reagent-hash", "value", "name-hash", "reagent-mode"]
+      ],
+      "help_message": "Write a property of a device or several devices."
+    },
+    {
+      "name": "set",
+      "arg_signatures": [["chip-id", "register|address", "register-or-address", "value"]],
+      "help_message": "Set the value of a register or address."
+    },
+    {
+      "name": "watch",
+      "arg_signatures": [["chip-id", "register|address", "register-or-address"]],
+      "help_message": "Watch the value of a register or address."
+    },
+    {
+      "name": "break",
+      "arg_signatures": [["line"]],
+      "help_message": "Set a breakpoint."
+    },
+    {
+      "name": "jump",
+      "arg_signatures": [["line"], ["function"]],
+      "help_message": "Jump to line or function."
+    },
+    {
+      "name": "return",
+      "arg_signatures": [[]],
+      "help_message": "Jump to return address."
+    },
+    {
+      "name": "disasm",
+      "aliases": ["dis", "disassemble"],
+      "arg_signatures": [["chip-id"], ["chip-id", "line"], ["chip-id", "line-start", "line-end"]],
+      "help_message": "Disassemble bytecode."
+    },
+    {
+      "name": "asm",
+      "aliases": ["assemble"],
+      "arg_signatures": [["name"]],
+      "help_message": "Assemble code."
+    },
+    {
+      "name": "hash",
+      "arg_signature": [["string"]],
+      "help_message": "Hash a string."
     }
   ]
 }

@@ -28,7 +28,7 @@ bool parse_command(const std::string& command, icsim_console_cmd *cmd) {
     iss >> cmd_str;
 
     cmd->argc = 0;
-    cmd->argv = new char*[2];
+    cmd->argv = new char*[6];
     if (cmd_str == "step") {
         cmd->command = CMD_STEP;
         std::string arg;
@@ -50,6 +50,93 @@ bool parse_command(const std::string& command, icsim_console_cmd *cmd) {
             cmd->argc++;
         }
         return cmd->argc < 1;
+    } else     if (cmd_str == "info") {
+        cmd->command = CMD_INFO;
+        std::string arg;
+        while (iss >> arg && cmd->argc <= 3) {
+            cmd->argv[cmd->argc] = new char[arg.size() + 1];
+            std::strncpy(cmd->argv[cmd->argc], arg.c_str(), arg.size() + 1);
+            cmd->argc++;
+        }
+        return cmd->argc < 3;
+    } else     if (cmd_str == "load") {
+        cmd->command = CMD_LOAD;
+        std::string arg;
+        while (iss >> arg && cmd->argc <= 6) {
+            cmd->argv[cmd->argc] = new char[arg.size() + 1];
+            std::strncpy(cmd->argv[cmd->argc], arg.c_str(), arg.size() + 1);
+            cmd->argc++;
+        }
+        return cmd->argc < 4;
+    } else     if (cmd_str == "store") {
+        cmd->command = CMD_STORE;
+        std::string arg;
+        while (iss >> arg && cmd->argc <= 6) {
+            cmd->argv[cmd->argc] = new char[arg.size() + 1];
+            std::strncpy(cmd->argv[cmd->argc], arg.c_str(), arg.size() + 1);
+            cmd->argc++;
+        }
+        return cmd->argc < 4;
+    } else     if (cmd_str == "set") {
+        cmd->command = CMD_SET;
+        std::string arg;
+        while (iss >> arg && cmd->argc <= 4) {
+            cmd->argv[cmd->argc] = new char[arg.size() + 1];
+            std::strncpy(cmd->argv[cmd->argc], arg.c_str(), arg.size() + 1);
+            cmd->argc++;
+        }
+        return cmd->argc < 4;
+    } else     if (cmd_str == "watch") {
+        cmd->command = CMD_WATCH;
+        std::string arg;
+        while (iss >> arg && cmd->argc <= 3) {
+            cmd->argv[cmd->argc] = new char[arg.size() + 1];
+            std::strncpy(cmd->argv[cmd->argc], arg.c_str(), arg.size() + 1);
+            cmd->argc++;
+        }
+        return cmd->argc < 3;
+    } else     if (cmd_str == "break") {
+        cmd->command = CMD_BREAK;
+        std::string arg;
+        while (iss >> arg && cmd->argc <= 1) {
+            cmd->argv[cmd->argc] = new char[arg.size() + 1];
+            std::strncpy(cmd->argv[cmd->argc], arg.c_str(), arg.size() + 1);
+            cmd->argc++;
+        }
+        return cmd->argc < 1;
+    } else     if (cmd_str == "jump") {
+        cmd->command = CMD_JUMP;
+        std::string arg;
+        while (iss >> arg && cmd->argc <= 1) {
+            cmd->argv[cmd->argc] = new char[arg.size() + 1];
+            std::strncpy(cmd->argv[cmd->argc], arg.c_str(), arg.size() + 1);
+            cmd->argc++;
+        }
+        return cmd->argc < 1;
+    } else     if (cmd_str == "return") {
+        cmd->command = CMD_RETURN;
+        std::string arg;
+    } else     if (cmd_str == "dis" || cmd_str == "disassemble" || cmd_str == "disasm") {
+        cmd->command = CMD_DISASM;
+        std::string arg;
+        while (iss >> arg && cmd->argc <= 3) {
+            cmd->argv[cmd->argc] = new char[arg.size() + 1];
+            std::strncpy(cmd->argv[cmd->argc], arg.c_str(), arg.size() + 1);
+            cmd->argc++;
+        }
+        return cmd->argc < 1;
+    } else     if (cmd_str == "assemble" || cmd_str == "asm") {
+        cmd->command = CMD_ASM;
+        std::string arg;
+        while (iss >> arg && cmd->argc <= 1) {
+            cmd->argv[cmd->argc] = new char[arg.size() + 1];
+            std::strncpy(cmd->argv[cmd->argc], arg.c_str(), arg.size() + 1);
+            cmd->argc++;
+        }
+        return cmd->argc < 1;
+    } else     if (cmd_str == "hash") {
+        cmd->command = CMD_HASH;
+        std::string arg;
     } else     if (cmd_str == "help") {
         cmd->command = CMD_HELP;
         std::string arg;
@@ -86,6 +173,28 @@ icsim_cmd get_command(std::string cmd_str) {
         return CMD_TICK;
     else     if (cmd_str == "run")
         return CMD_RUN;
+    else     if (cmd_str == "info")
+        return CMD_INFO;
+    else     if (cmd_str == "load")
+        return CMD_LOAD;
+    else     if (cmd_str == "store")
+        return CMD_STORE;
+    else     if (cmd_str == "set")
+        return CMD_SET;
+    else     if (cmd_str == "watch")
+        return CMD_WATCH;
+    else     if (cmd_str == "break")
+        return CMD_BREAK;
+    else     if (cmd_str == "jump")
+        return CMD_JUMP;
+    else     if (cmd_str == "return")
+        return CMD_RETURN;
+    else     if (cmd_str == "dis" || cmd_str == "disassemble" || cmd_str == "disasm")
+        return CMD_DISASM;
+    else     if (cmd_str == "assemble" || cmd_str == "asm")
+        return CMD_ASM;
+    else     if (cmd_str == "hash")
+        return CMD_HASH;
     else     if (cmd_str == "help")
         return CMD_HELP;
     else     if (cmd_str == "exit" || cmd_str == "quit")

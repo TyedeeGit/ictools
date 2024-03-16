@@ -28,8 +28,8 @@ int process_commands(const std::vector<SimulatedIC<SimulatedICInterface>*>& chip
     icsim_console_cmd command;
     bool parsing_failed;
     while (true) {
-        std::cout << error_stream.str();
-        std::cout.flush();
+        std::cerr << error_stream.str();
+        std::cerr.flush();
         std::cout << ">";
         std::getline(std::cin, command_string);
         parsing_failed = parse_command(command_string, &command);
@@ -63,6 +63,28 @@ int process_commands(const std::vector<SimulatedIC<SimulatedICInterface>*>& chip
             case CMD_TICK:
                 break;
             case CMD_RUN:
+                break;
+            case CMD_INFO:
+                break;
+            case CMD_SET:
+                break;
+            case CMD_WATCH:
+                break;
+            case CMD_BREAK:
+                break;
+            case CMD_JUMP:
+                break;
+            case CMD_RETURN:
+                break;
+            case CMD_DISASM:
+                break;
+            case CMD_LOAD:
+                break;
+            case CMD_STORE:
+                break;
+            case CMD_HASH:
+                break;
+            case CMD_ASM:
                 break;
         }
     }
