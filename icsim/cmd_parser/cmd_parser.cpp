@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-#include "parser.h"
+#include "cmd_parser.h"
 
 bool parse_command(const std::string& command, icsim_console_cmd *cmd) {
     std::istringstream iss(command);

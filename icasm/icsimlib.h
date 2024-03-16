@@ -20,11 +20,4 @@
  * SOFTWARE.
  */
 
-#ifndef MAIN_H
-#define MAIN_H
-
-#include "icasmlib.h"
-
-// int main(int argc, char *argv[]);
-
-#endif //MAIN_H
+#include "../icsim/icsimlib.h"

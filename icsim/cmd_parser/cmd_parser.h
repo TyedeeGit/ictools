@@ -20,8 +20,8 @@
  * SOFTWARE.
  */
 
-#ifndef PARSER_H
-#define PARSER_H
+#ifndef CMD_PARSER_H
+#define CMD_PARSER_H
 
 #include <iostream>
 #include <sstream>
@@ -114,4 +114,4 @@ icsim_cmd get_command(std::string command);
 #ifdef __cplusplus
 }
 #endif
-#endif //PARSER_H
+#endif //CMD_PARSER_H

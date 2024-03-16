@@ -20,11 +20,33 @@
  * SOFTWARE.
  */
 
-#ifndef MAIN_H
-#define MAIN_H
+#ifndef PARSER_H
+#define PARSER_H
 
-#include "icasmlib.h"
+#ifdef __cplusplus
+#include <cstdio>
+#include <cinttypes>
+#include <iostream>
+#include <sstream>
+extern "C" {
+#else
+#include <stdio.h>
+#include <stdlib.h>
+#include <inttypes.h>
+#endif
 
-// int main(int argc, char *argv[]);
+extern int yyparse_string(const char *str);
+extern int yyparse();
+extern FILE *yyin;
 
-#endif //MAIN_H
+typedef struct {
+    char *instruction;
+    uint32_t argc;
+    char *argv[];
+} yyinstruction;
+
+
+#ifdef __cplusplus
+}
+#endif
+#endif //PARSER_H

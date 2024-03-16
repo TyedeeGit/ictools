@@ -23,4 +23,7 @@
 #ifndef ICASMLIB_H
 #define ICASMLIB_H
 
+#include "icsimlib.h"
+#include "parser/parser.h"
+
 #endif //ICASMLIB_H

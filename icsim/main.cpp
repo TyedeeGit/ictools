@@ -41,7 +41,7 @@ uint32_t run_all_chips(const std::vector<SimulatedIC<SimulatedICInterface>*>& ch
     return instructions_run;
 }
 
-int32_t process_commands(const std::vector<SimulatedIC<SimulatedICInterface>*>& chips, FILE *output_log) {
+int process_commands(const std::vector<SimulatedIC<SimulatedICInterface>*>& chips, FILE *output_log) {
     std::string command_string;
     std::stringstream error_stream;
     icsim_console_cmd command;
@@ -139,7 +139,7 @@ void print_help() {
     printf("  [[-l | --log] [output]]     Log output to file\n");
 }
 
-int32_t main(int32_t argc, char *argv[]) {
+int main(int argc, char *argv[]) {
     if (argc < 2 || argc > 4) {
         print_help();
         return 1;
